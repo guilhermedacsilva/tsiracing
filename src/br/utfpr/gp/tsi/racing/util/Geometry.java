@@ -13,4 +13,12 @@ public class Geometry {
 		return (int) Math.signum( (bx-ax)*(py-ay) - (by-ay)*(px-ax) );
 	}
 	
+	public static double calcDistanceBetweenPoints(int x1, int y1, int x2, int y2) {
+		return Math.abs(
+					Math.sqrt(
+						Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2)
+					)
+				);
+	}
+	
 }

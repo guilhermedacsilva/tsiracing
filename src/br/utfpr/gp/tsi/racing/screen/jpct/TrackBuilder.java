@@ -10,13 +10,15 @@ import com.threed.jpct.TextureManager;
 import com.threed.jpct.World;
 
 public class TrackBuilder {
+	private static final String TEXTURE_TRACK_NAME = "sand";
+	private static final String TEXTURE_WATER_NAME = "water";
 
 	public static void build(World world, int[][] matrix) {
 		Object3D plane = Primitives.getPlane(100, 1);
 		plane.rotateX((float)Math.PI/2);
 		Texture texture = new Texture(Track.class.getResourceAsStream("res/sand.jpg"));
-		TextureManager.getInstance().addTexture("sand", texture);
-		plane.setTexture("sand");
+		TextureManager.getInstance().addTexture(TEXTURE_TRACK_NAME, texture);
+		plane.setTexture(TEXTURE_TRACK_NAME);
 		
 		Mesh planeMesh = plane.getMesh();
 		planeMesh.setVertexController(new TrackVertexController(matrix), false);
@@ -28,8 +30,8 @@ public class TrackBuilder {
 		Object3D water = Primitives.getPlane(1, 200);
 		water.rotateX((float)Math.PI/2);
 		texture = new Texture(Track.class.getResourceAsStream("res/water.jpg"));
-		TextureManager.getInstance().addTexture("water", texture);
-		water.setTexture("water");
+		TextureManager.getInstance().addTexture(TEXTURE_WATER_NAME, texture);
+		water.setTexture(TEXTURE_WATER_NAME);
 		water.translate(0, -0.75f, 0);
 		world.addObject(water);
 	}

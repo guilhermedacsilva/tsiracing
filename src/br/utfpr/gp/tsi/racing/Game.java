@@ -5,64 +5,44 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import com.threed.jpct.Config;
-
 import br.utfpr.gp.tsi.racing.car.Car;
-import br.utfpr.gp.tsi.racing.car.CarLoader;
-import br.utfpr.gp.tsi.racing.car.JsCarInterpreter;
+import br.utfpr.gp.tsi.racing.car.CarJsFileLoader;
 import br.utfpr.gp.tsi.racing.screen.IScreen;
 import br.utfpr.gp.tsi.racing.screen.jpct.Screen3D;
 import br.utfpr.gp.tsi.racing.track.Track;
 
 public class Game {
-	public static final boolean DEBUG = false;
-	private static final String OPTION_NO_SCREEN = "semtela";
+	
+	private GameOptions options;
 	private List<Car> carList;
 	private IScreen screen;
-	private boolean optionNoScreen = false;
-	private String optionTrack = "1";
-	private int optionSpeed = 1;
-	private final Race race = new Race();
+	private Race race;
 	
-	public Game(String[] args) throws Exception {
-		for (String option : args) {
-			if (OPTION_NO_SCREEN.equals(option)) {
-				optionNoScreen = true;
-			} else if (option.startsWith("pista")) {
-				optionTrack = String.valueOf(option.charAt(5));
-				if (!optionTrack.equals("1")
-						&& !optionTrack.equals("2")) {
-					System.exit(1);
-				}
-			} else if (option.startsWith("velocidade")) {
-				optionSpeed = Integer.parseInt(String.valueOf(option.charAt(10)));
-				if (optionSpeed < 1 || optionSpeed > 4) optionSpeed = 1;
-			}
-		}
+	public Game(String[] args) {
+		options = new GameOptions(args);
 	}
 	
-	void run() throws Exception {
-		load();
+	void run() throws IOException {
+		loadResources();
 		startRace();
 		saveResults();
 	}
 
-	private void load() throws Exception {
-		Track track = new Track(optionTrack);	
-		Car.init(new JsCarInterpreter(), track);
-		carList = CarLoader.loadJs();
+	private void loadResources() throws IOException {
+		Track track = new Track(options.getTrackNumber());	
+		Car.init(track);
+		carList = CarJsFileLoader.loadJs();
 		
-		if (optionNoScreen) return;
-
-		Config.maxPolysVisible = 100000;
-		screen = new Screen3D();
-		screen.setCarList(carList);
-		screen.setTrack(track);
+		if (options.shouldShowScreen()) {
+			screen = new Screen3D();
+			screen.setCarList(carList);
+			screen.setTrack(track);
+		}
 	}
 
 	private void startRace() {
-		race.init(screen, carList);
-		race.run(optionSpeed);
+		race = new Race(screen, carList);
+		race.run(options.getSpeed());
 	}
 
 	private void saveResults() throws IOException {

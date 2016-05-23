@@ -1,13 +1,21 @@
 package br.utfpr.gp.tsi.racing.screen.jpct;
 
 import br.utfpr.gp.tsi.racing.track.Track;
+import br.utfpr.gp.tsi.racing.util.Geometry;
 
 import com.threed.jpct.GenericVertexController;
 import com.threed.jpct.SimpleVector;
 
+/**
+ * Transforms the plane vertex.
+ * It elevates the track, so it will be higher than the sea/water.
+ */
 public class TrackVertexController extends GenericVertexController {
 	private static final long serialVersionUID = 1L;
 	private static final int SEARCH_RANGE = 75;
+	private static final float HEIGHT_ROAD = 3f;
+	private static final float HEIGHT_WATER = 0;
+	
 	private int[][] matrix;
 	
 	public TrackVertexController(int[][] matrix) {
@@ -24,46 +32,48 @@ public class TrackVertexController extends GenericVertexController {
 	 */
 	@Override
 	public void apply() {
-		SimpleVector[] s = getSourceMesh();
-		SimpleVector[] d = getDestinationMesh();
-		int mx , my;
-		for (int i = 0; i < s.length; i++) {
-			d[i].x = s[i].x;
-			d[i].y = s[i].y;
-			d[i].z = s[i].z;
+		SimpleVector[] source = getSourceMesh();
+		SimpleVector[] dest = getDestinationMesh();
+		int offsetX , offsetY;
+		for (int i = 0; i < source.length; i++) {
+			dest[i].x = source[i].x;
+			dest[i].y = source[i].y;
+			dest[i].z = source[i].z;
 			
-			if (d[i].x == 50 || d[i].y == 50) continue;
-			
-			mx = (int) (10 * (s[i].x + 50));
-			my = (int) (10 * (s[i].y + 50));
-			d[i].z -= calculateHeight(mx, my);
+			if (dest[i].x != 50 && dest[i].y != 50) {
+				offsetX = (int) (10 * (source[i].x + 50));
+				offsetY = (int) (10 * (source[i].y + 50));
+				dest[i].z -= calculateHeight(offsetX, offsetY);
+			}
 		}
 	}
 	
-	private float calculateHeight(int x, int y) {
-		int mx, my;
-		double closest = 100, distance;
-		for (int i = -SEARCH_RANGE; i <= SEARCH_RANGE; i++) {
-			for (int j = -SEARCH_RANGE; j <= SEARCH_RANGE; j++) {
-				mx = x+i;
-				my = y+j;
-				if (mx < 0 || mx > 999 || my < 0 || my > 999) {
+	/**
+	 * If the point is close enough to the road, than it will return HEIGHT_ROAD.
+	 */
+	private float calculateHeight(int centerX, int centerY) {
+		int matrixX, matrixY;
+		double minDistanceFound = 100;
+		double distanceBetweenPoints;
+		for (int offsetX = -SEARCH_RANGE; offsetX <= SEARCH_RANGE; offsetX++) {
+			for (int offsetY = -SEARCH_RANGE; offsetY <= SEARCH_RANGE; offsetY++) {
+				matrixX = centerX+offsetX;
+				matrixY = centerY+offsetY;
+				if (matrixX < 0 || matrixX > 999 || matrixY < 0 || matrixY > 999) {
 					continue;
 				}
-				if (matrix[mx][my] == Track.ROAD) {
-					distance = Math.abs(Math.sqrt(
-							Math.pow(x-mx, 2) + Math.pow(y-my, 2)
-							));
-					if (distance < closest) {
-						closest = distance;
+				if (matrix[matrixX][matrixY] == Track.PIXEL_ROAD) {
+					distanceBetweenPoints = Geometry.calcDistanceBetweenPoints(centerX, centerY, matrixX, matrixY);
+					if (distanceBetweenPoints < minDistanceFound) {
+						minDistanceFound = distanceBetweenPoints;
 					}
 				}
 			}
 		}
-		if (closest < 0 || closest > 70) {
-			return 0;
+		if (minDistanceFound < 0 || minDistanceFound > 70) {
+			return HEIGHT_WATER;
 		}
-		return 3f;
+		return HEIGHT_ROAD;
 	}
 	
 }

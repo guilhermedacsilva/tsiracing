@@ -14,6 +14,10 @@ import br.utfpr.gp.tsi.racing.car.ICar;
 import br.utfpr.gp.tsi.racing.screen.IScreen;
 import br.utfpr.gp.tsi.racing.track.Track;
 
+/**
+ * This class was used to test the game.
+ * It creates a 2D screen.
+ */
 public class SwingScreen extends JFrame implements IScreen {
 	private static final long serialVersionUID = 1L;
 	private List<? extends ICar> carList;
@@ -40,7 +44,6 @@ public class SwingScreen extends JFrame implements IScreen {
 			}
 		}
 		g.drawString(car.getName(), point.x-5, point.y+15);
-//		g.drawString(String.valueOf(car.getClassification()), point.x-1, point.y-15);
 	}
 
 	public SwingScreen() {
@@ -56,7 +59,7 @@ public class SwingScreen extends JFrame implements IScreen {
 				g.fillRect(0, 0, 1000, 1000);
 				for (int i = 0; i < 1000; i++) {
 					for (int j = 0; j < 1000; j++) {
-						if (matrix[i][j] == Track.ROAD) {
+						if (matrix[i][j] == Track.PIXEL_ROAD) {
 							g.setColor(Color.BLACK);
 							g.drawLine(i, j, i, j);
 						}

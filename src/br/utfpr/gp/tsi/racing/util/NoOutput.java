@@ -1,6 +1,5 @@
 package br.utfpr.gp.tsi.racing.util;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -10,7 +9,7 @@ import java.io.PrintStream;
  */
 public class NoOutput extends PrintStream {
 
-	public NoOutput() throws FileNotFoundException {
+	public NoOutput() {
 		super(new OutputStream() {
 			@Override
 			public void write(int b) throws IOException {}

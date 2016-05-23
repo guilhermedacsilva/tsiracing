@@ -7,7 +7,7 @@ import java.io.Reader;
 
 public final class ReaderUtil {
 	
-	public static String read(Reader reader) throws IOException {
+	public static String readAll(Reader reader) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader(reader);
 		StringBuilder builder = new StringBuilder();
 		String line;
@@ -18,8 +18,8 @@ public final class ReaderUtil {
 		return builder.toString();
 	}
 	
-	public static String read(String filename) throws IOException {
-		return read(new FileReader(filename));
+	public static String readFile(String filename) throws IOException {
+		return readAll(new FileReader(filename));
 	}
 	
 }

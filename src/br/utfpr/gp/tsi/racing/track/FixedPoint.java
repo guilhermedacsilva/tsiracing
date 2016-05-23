@@ -2,6 +2,8 @@ package br.utfpr.gp.tsi.racing.track;
 
 import java.awt.Point;
 
+import br.utfpr.gp.tsi.racing.util.Geometry;
+
 public final class FixedPoint {
 	public final int x;
 	public final int y;
@@ -12,9 +14,7 @@ public final class FixedPoint {
 	}
 	
 	public static double calculateDistance(Point p1, FixedPoint p2) {
-		return Math.abs(Math.sqrt(
-				Math.pow(p1.x-p2.x, 2) + Math.pow(p1.y-p2.y, 2)
-				));
+		return Geometry.calcDistanceBetweenPoints(p1.x, p1.y, p2.x, p2.y);
 	}
 
 	@Override

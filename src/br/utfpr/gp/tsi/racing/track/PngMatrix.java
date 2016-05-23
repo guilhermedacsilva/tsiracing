@@ -13,16 +13,16 @@ public class PngMatrix {
 			for (int j = 0; j < 1000; j++) {
 				raster.getPixel(i, j, pixel);
 				if (isPixelGrass(pixel)) {
-					matrix[i][j] = Track.GRASS;
+					matrix[i][j] = Track.PIXEL_GRASS;
 					
 				} else if (isPixelRoad(pixel)) {
-					matrix[i][j] = Track.ROAD;
+					matrix[i][j] = Track.PIXEL_ROAD;
 					
 				} else if (isPixelStart(pixel)) {
-					matrix[i][j] = Track.START;
+					matrix[i][j] = Track.PIXEL_START;
 					
 				} else if (isPixelCurve(pixel)) {
-					matrix[i][j] = Track.CURVE;
+					matrix[i][j] = Track.PIXEL_CURVE;
 					
 				} else {
 					throw new RuntimeException("Pixel undefined: x,y = " + i + "," + j);

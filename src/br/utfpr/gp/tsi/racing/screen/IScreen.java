@@ -9,6 +9,6 @@ public interface IScreen {
 
 	void setTrack(Track track);
 	void setCarList(List<? extends ICar> carList);
-	void update();	
+	void update();
 
 }

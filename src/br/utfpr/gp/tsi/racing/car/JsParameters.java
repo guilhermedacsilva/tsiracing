@@ -3,7 +3,7 @@ package br.utfpr.gp.tsi.racing.car;
 import org.json.JSONObject;
 
 public class JsParameters {
-	public static final JsParameters INSTANCE = new JsParameters();
+	private static final JsParameters SINGLETON = new JsParameters();
 	private int centro;
 	private int velocidade;
 	private int curvaDistancia;
@@ -11,16 +11,17 @@ public class JsParameters {
 	
 	private JsParameters() {}
 
-	public void update(int center,
+	public static JsParameters reuseSingleton(
+			int center,
 			int speed,
 			int curveDistance,
 			int curveSide) {
 		
-		this.centro = center;
-		this.velocidade = speed;
-		this.curvaDistancia = curveDistance;
-		this.curvaDirecao = curveSide;
-		
+		SINGLETON.centro = center;
+		SINGLETON.velocidade = speed;
+		SINGLETON.curvaDistancia = curveDistance;
+		SINGLETON.curvaDirecao = curveSide;
+		return SINGLETON;
 	}
 
 	public String generateJson() {

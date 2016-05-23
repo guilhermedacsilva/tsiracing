@@ -7,27 +7,26 @@ import java.util.List;
 import org.lwjgl.opengl.Display;
 
 import br.utfpr.gp.tsi.racing.car.Car;
-import br.utfpr.gp.tsi.racing.car.JsCarInterpreter;
 import br.utfpr.gp.tsi.racing.screen.IScreen;
 import br.utfpr.gp.tsi.racing.util.GameFPS;
 
 public class Race {
 	public static final int LAPS = 3;
-	private static final long MAX_TIME = 600 * 1000; // 10 min
+	public static final long MAX_TIME = 600 * 1000; // 10 min
 	private IScreen screen;
 	private List<Car> carList;
 	private List<String> carWinList;
 	// no screen
 	private int carsRunning;
 
-	public void init(IScreen screen, List<Car> carList) {
+	public Race(IScreen screen, List<Car> carList) {
 		this.screen = screen;
 		this.carList = carList;
 	}
 
 	public void run(int speed) {
-		final long start = System.currentTimeMillis();
 		carWinList = new ArrayList<String>(carList.size());
+		final long start = System.currentTimeMillis();
 		
 		if (screen == null) {
 			runNoScreen(start);
@@ -72,38 +71,7 @@ public class Race {
 		return carsRunning > 0;
 	}
 	
-//	private void runNoScreenThreads(long start) {
-//		final int MAX_THREADS = Runtime.getRuntime().availableProcessors();
-//		System.out.println("MAX_THREADS: " + MAX_THREADS);
-//		carsRunning = 0;
-//		int currentCarIndex = 0;
-//		
-//		while (currentCarIndex < carList.size()) {
-//			if (carsRunning < MAX_THREADS) {
-//				new RaceThread(this, carList.get(currentCarIndex)).start();
-//				currentCarIndex++;
-//				carsRunning++;
-//			} else {
-//				try {
-//					Thread.sleep(5000);
-//				} catch (Exception e) {}
-//			}
-//		}
-//		
-//		while (isCarRunning()) {
-//			try {
-//				Thread.sleep(5000);
-//			} catch (Exception e) {}
-//		}
-//		
-//		carList.sort(CarClassification.INSTANCE);
-//		for (Car car : carList) {
-//			carWinList.add(car.getName());
-//		}
-//	}
-	
 	private void runNoScreen(long start) {
-		JsCarInterpreter.setSafeMode();
 		Car car;
 		Iterator<Car> iterator;
 		int i = 0;
@@ -125,8 +93,8 @@ public class Race {
 				}
 			}
 		}
-//		System.out.print("LOOP PERFORMANCE: "+i+" ... ");
-//		System.out.println((System.currentTimeMillis()-start)/1000);
+		Debug.print("LOOP PERFORMANCE: "+i+" ... "
+				+ String.valueOf((System.currentTimeMillis()-start)/1000));
 	}
 	
 	public List<String> getCarWinList() {

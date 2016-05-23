@@ -10,7 +10,7 @@ import com.threed.jpct.TextureManager;
 public class Object3dUtil {
 
 	/**
-	 * @param name use extension
+	 * @param name must use file extension
 	 */
 	public static void applyTexture(Object3D obj, String textureName) {
 		if (!TextureManager.getInstance().containsTexture(textureName)) {
@@ -19,6 +19,7 @@ public class Object3dUtil {
 		}
 		obj.setTexture(textureName);
 	}
+	
 	public static void applyTexture(Object3D obj, String textureName, InputStream textureStream) {
 		if (!TextureManager.getInstance().containsTexture(textureName)) {
 			Texture texture = new Texture(textureStream);
@@ -26,6 +27,7 @@ public class Object3dUtil {
 		}
 		obj.setTexture(textureName);
 	}
+	
 	public static void applyTexture(Object3D obj, String textureName, Color color) {
 		if (!TextureManager.getInstance().containsTexture(textureName)) {
 			Texture texture = new Texture(2,2,color);
@@ -33,6 +35,7 @@ public class Object3dUtil {
 		}
 		obj.setTexture(textureName);
 	}
+	
 	public static Texture loadTexture(String name) {
 		return new Texture(name);
 	}

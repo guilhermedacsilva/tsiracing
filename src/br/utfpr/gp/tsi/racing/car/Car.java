@@ -2,17 +2,19 @@ package br.utfpr.gp.tsi.racing.car;
 
 import java.awt.Point;
 
+import javax.script.ScriptException;
+
+import br.utfpr.gp.tsi.racing.Debug;
 import br.utfpr.gp.tsi.racing.track.FixedPoint;
 import br.utfpr.gp.tsi.racing.track.Track;
 import br.utfpr.gp.tsi.racing.util.Geometry;
-import br.utfpr.gp.tsi.racing.util.ListCircular;
+import br.utfpr.gp.tsi.racing.util.CircularList;
 
 public class Car implements ICar {
 	private static final double MAX_REAL_SPEED = 10;
 	private static final double FACTOR_JS_SPEED = 200/MAX_REAL_SPEED;
 	private static final int MAX_CENTER_DISTANCE = 30;
 
-	private static JsCarInterpreter jsInterpreter;
 	private static Track track;
 	
 	static final int PEDAL_NOTHING = 0;
@@ -49,21 +51,20 @@ public class Car implements ICar {
 	
 	private long noScreenIterationCount;
 	
-	public static void init(JsCarInterpreter interpreter, Track track) {
-		Car.jsInterpreter = interpreter;
+	public static void init(Track track) {
 		Car.track = track;
 	}
 
-	public Car(String name) throws Exception {
+	public Car(String name) {
 		this.name = name;
 		location = track.getStart().getLocation();
-		angleRadians = Math.PI/2; // up
+		angleRadians = Math.PI/2; // 90 degree
 		roadPoint = track.getRoadList().get(roadIndex);
 		curvePoint = track.getCurveList().get(curveIndex);
 
 		try {
-			jsCarIndex = jsInterpreter.createCarJsVariable(name);
-		} catch (Exception e) {
+			jsCarIndex = JsEngine.createCarJsVariable(name);
+		} catch (ScriptException e) {
 			bugged = true;
 		}
 		updateCurveDistanceSide();
@@ -85,7 +86,9 @@ public class Car implements ICar {
 		roadIndex = track.calculateClosestRoadPoint(roadIndex, location);
 		roadPoint = track.getRoadList().get(roadIndex);
 		
-		if (roadIndex < circuitIndex) circuitFinished++;
+		if (roadIndex < circuitIndex) {
+			circuitFinished++;
+		}
 		circuitIndex = roadIndex;
 		
 		center = calculateDistanceFromCenter(location);
@@ -93,16 +96,14 @@ public class Car implements ICar {
 	}
 
 	private int calculateDistanceFromCenter(final Point location) {		
-		final int nextIndex = ListCircular.next(track.getRoadList(), roadIndex);
+		final int nextIndex = CircularList.next(track.getRoadList(), roadIndex);
 		final FixedPoint nextPoint = track.getRoadList().get(nextIndex);
 		
 		final int sign = Geometry.getSideOfTheLine(roadPoint.x, roadPoint.y, 
 				nextPoint.x, nextPoint.y, 
 				location.x, location.y);
 		
-//		if (Game.DEBUG) {
-//			System.out.println("distance from center: " + (sign * FixedPoint.calculateDistance(location, roadPoint)));
-//		}
+		Debug.print("distance from center: " + (sign * FixedPoint.calculateDistance(location, roadPoint)));
 
 		final int newRoadIndex = track.calculateClosestRoadPoint(roadIndex, location);
 		final FixedPoint newRoadPoint = track.getRoadList().get(newRoadIndex);
@@ -111,25 +112,21 @@ public class Car implements ICar {
 	}
 
 	private void calculateCurve() {
-		
 		curveDistanceOld = curveDistance;
 		curveDistance = (int)FixedPoint.calculateDistance(location, curvePoint);
 		if (curveDistance <= 50 && curveDistance >= curveDistanceOld) { 
-			curveIndex = ListCircular.next(track.getCurveList(), curveIndex);
+			curveIndex = CircularList.next(track.getCurveList(), curveIndex);
 			curvePoint = track.getCurveList().get(curveIndex);
 			updateCurveDistanceSide();
 		}
 		
-//		if (Game.DEBUG) {
-//			System.out.println("Curve index/distance/side: " + 
-//						curveIndex + " / " + curveDistance + " / " + curveSide);
-//		}
+		Debug.print("Curve index/distance/side: " + curveIndex + " / " + curveDistance + " / " + curveSide);
 	}
 	
 	private void updateCurveDistanceSide() {
 		curveDistance = (int)FixedPoint.calculateDistance(location, curvePoint);
 
-		final int nextIndex = ListCircular.next(track.getRoadList(), roadIndex);
+		final int nextIndex = CircularList.next(track.getRoadList(), roadIndex);
 		final FixedPoint nextPoint = track.getRoadList().get(nextIndex);
 		final FixedPoint beforeCurvePoint = track.getRoadBeforeCurveList().get(curveIndex);
 		
@@ -139,27 +136,23 @@ public class Car implements ICar {
 	}
 
 	private boolean playJs() {
+		Debug.print("rspeed="+speed+"|jspeed="+(int)(FACTOR_JS_SPEED * speed));
 		
-//		if (Game.DEBUG && name.equals("Presley")) {
-//			System.out.println("rspeed="+speed+"|jspeed="+(int)(FACTOR_JS_SPEED * speed));
-//		}
-		
-		JsParameters.INSTANCE.update(
+		JsParameters jsParameters = JsParameters.reuseSingleton(
 				center, 
-				(int)(FACTOR_JS_SPEED * speed), 
-				curveDistance, 
+				(int)(FACTOR_JS_SPEED * speed),
+				curveDistance,
 				curveSide);
+		
 		try {
-			jsInterpreter.playCar(jsCarIndex, JsParameters.INSTANCE);
-			pedal = jsInterpreter.getCarPedal(jsCarIndex);
-			wheel = jsInterpreter.getCarWheel(jsCarIndex);
+			JsEngine.playCar(jsCarIndex, jsParameters);
+			pedal = JsEngine.getCarPedal(jsCarIndex);
+			wheel = JsEngine.getCarWheel(jsCarIndex);
 			
-//			if (Game.DEBUG) {
-//				System.out.println("car["+name+"] pedal="+pedal+" wheel="+wheel);
-//			}
+			Debug.print("car["+name+"] pedal="+pedal+" wheel="+wheel);
 			
 		} catch (Exception e) {
-			System.err.println("\nErro na programação do BOT!\nPode ser erro de sintaxe ou loop infinito.");
+			System.err.println("The bot has an error!");
 			bugged = true;
 			return false;
 		}
@@ -199,9 +192,7 @@ public class Car implements ICar {
 			speed = 0;
 		}
 		
-//		if (Game.DEBUG) {
-//			System.out.println(name + "| vel:" + speed + "| angle: " + angleRadians);
-//		}
+		Debug.print(name + "| vel:" + speed + "| angle: " + angleRadians);
 	}
 	
 	private boolean isFarFromCenter(final int x, final int y) {
@@ -212,22 +203,21 @@ public class Car implements ICar {
 	public String getName() {
 		return name;
 	}
-	
+
+	@Override
 	public Point getLocation() {
 		return location;
 	}
-	
+
+	@Override
 	public double getAngleRadians() {
 		return angleRadians;
 	}
-	
+
+	@Override
 	public double getAngleDegrees() {
 		return Math.toDegrees(angleRadians);
 	}
-	
-//	public int getDistanceRunned() {
-//		return circuitIndex + circuitFinished * track.getRoadList().size();
-//	}
 	
 	public int getLaps() {
 		return circuitFinished;
@@ -269,8 +259,5 @@ public class Car implements ICar {
 			return false;
 		return true;
 	}
-	
-	
-		
 	
 }
