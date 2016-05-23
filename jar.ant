@@ -3,19 +3,19 @@
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <target name="create_run_jar">
-        <jar destfile="/media/guilherme/Dados/workspace java/tsiracing/tsiracing.jar" filesetmanifest="mergewithoutmain">
+        <jar destfile="tsiracing.jar" filesetmanifest="mergewithoutmain">
             <manifest>
-                <attribute name="Main-Class" value="br.utfpr.gp.tsi.racing.Game"/>
+                <attribute name="Main-Class" value="br.utfpr.gp.tsi.racing.Main"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
-            <fileset dir="/media/guilherme/Dados/workspace java/tsiracing/bin"/>
-            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/jpct.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/lwjgl_util.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/lwjgl.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/org.json.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/jinput.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/lzma.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/AppleJavaExtensions.jar"/>
+            <fileset dir="bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/jpct.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/lwjgl_util.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/lwjgl.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/org.json.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/jinput.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/lzma.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/AppleJavaExtensions.jar"/>
         </jar>
     </target>
 </project>

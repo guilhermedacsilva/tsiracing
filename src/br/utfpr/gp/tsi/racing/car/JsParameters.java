@@ -4,23 +4,23 @@ import org.json.JSONObject;
 
 public class JsParameters {
 	private static final JsParameters SINGLETON = new JsParameters();
-	private int centro;
-	private int velocidade;
-	private int curvaDistancia;
-	private int curvaDirecao;
+	private int centerDistance;
+	private int speed;
+	private int curveDistance;
+	private int curveSide;
 	
 	private JsParameters() {}
 
 	public static JsParameters reuseSingleton(
-			int center,
+			int centerDistance,
 			int speed,
 			int curveDistance,
 			int curveSide) {
 		
-		SINGLETON.centro = center;
-		SINGLETON.velocidade = speed;
-		SINGLETON.curvaDistancia = curveDistance;
-		SINGLETON.curvaDirecao = curveSide;
+		SINGLETON.centerDistance = centerDistance;
+		SINGLETON.speed = speed;
+		SINGLETON.curveDistance = curveDistance;
+		SINGLETON.curveSide = curveSide;
 		return SINGLETON;
 	}
 
@@ -28,33 +28,34 @@ public class JsParameters {
 		return new JSONObject(this).toString();
 	}
 
-	public int getCentro() {
-		return centro;
+	public int getCenterDistance() {
+		return centerDistance;
 	}
 
-	public void setCentro(int centro) {
-		this.centro = centro;
+	public void setCenterDistance(int center) {
+		this.centerDistance = center;
 	}
 
-	public int getVelocidade() {
-		return velocidade;
+	public int getCurveDistance() {
+		return curveDistance;
 	}
-
-	public void setVelocidade(int velocidade) {
-		this.velocidade = velocidade;
+	
+	public void setCurveDistance(int curveDistance) {
+		this.curveDistance = curveDistance;
 	}
-
-	public int getCurvaDistancia() {
-		return curvaDistancia;
+	
+	public int getSpeed() {
+		return speed;
 	}
-
-	public void setCurvaDistancia(int curvaDistancia) {
-		this.curvaDistancia = curvaDistancia;
+	
+	public void setSpeed(int speed) {
+		this.speed = speed;
 	}
-
-	public String getCurvaDirecao() {
-		return curvaDirecao == -1 ? "esquerda" : "direita";
+	
+	public String getCurveSide() {
+		return curveSide == -1 ? JsEngine.ATRRIBUTE_WHEEL_LEFT : JsEngine.ATRRIBUTE_WHEEL_RIGHT;
 	}
-	public void setCurvaDirecao(String curvaDirecao) {}
+	
+	public void setCurveSide(String curveSide) {}
 	
 }

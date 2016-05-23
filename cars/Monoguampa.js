@@ -1,32 +1,47 @@
 {
 	/*
-	--------------------------
-	-- O ALUNO PODE ALTERAR --
-
-	this.pedal = 'acelerar', 'frear', ''
-
-	this.volante = 'direita', 'esquerda', ''
 	
-	----------------------
-	-- O ALUNO DEVE LER --
+	BASIC RULES
+	
+	----------------------------
+	-- YOU CAN READ AND WRITE --
 
-	info.velocidade = 0 até 200
+	this.pedal = 'accelerate', 'brake', ''
 
-	info.curvaDistancia = 0 até 99999
+	this.wheel = 'right', 'left', ''
+	
+	-----------------------
+	-- YOU CAN ONLY READ --
 
-	info.curvaDirecao = 'esquerda', 'direita'
+	info.speed = 0 to 200
 
-	info.centro = -20 até 20, é a distância até o centro da pista, 
-				negativo significa que está à esquerda do centro.
+	info.curveDistance = 0 to 99999
+
+	info.curveSide = 'left', 'right'
+
+	info.centerDistance = -20 to 20 (negative is left)
+	
+	--------------------------------------------
+	DO NOT PUT CODE BEFORE AND AFTER THIS JS OBJECT.
+	YOU CAN CREATE OTHER ATTRIBUTES AND METHODS.
+	THE OBJECT STATE IS PRESERVED BETWEEN CALLS
+	--------------------------------------------
+	
 	*/
 	pedal: '',
-	volante: '',
+	wheel: '',
 	
-	jogar: function(info) {
-		this.pedal = 'acelerar';
+	play: function(info) {
+		this.pedal = 'accelerate';
 
-		if (info.centro > 0) this.volante = 'esquerda';
-		else if (info.centro < 0) this.volante = 'direita';
-		else this.volante = '';
+		if (info.centerDistance > 0) {
+			this.wheel = 'left';
+		
+		} else if (info.centerDistance < 0) {
+			this.wheel = 'right';
+		
+		} else {
+			this.wheel = '';
+		}
 	}
 }

@@ -46,7 +46,7 @@ public class Game {
 	}
 
 	private void saveResults() throws IOException {
-		final File file = new File("resultado.txt");
+		final File file = new File("result.txt");
 		if (!file.exists()) {
 			file.createNewFile();
 		}

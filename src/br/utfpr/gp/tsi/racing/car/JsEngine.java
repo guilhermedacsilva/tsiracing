@@ -10,19 +10,19 @@ import br.utfpr.gp.tsi.racing.Debug;
 import br.utfpr.gp.tsi.racing.util.ReaderUtil;
 
 public class JsEngine {
-	private static final String ATRRIBUTE_PEDAL = "pedal";
-	private static final String ATRRIBUTE_PEDAL_ACCELERATE = "acelerar";
-	private static final String ATRRIBUTE_PEDAL_BRAKE = "frear";
-	private static final String ATRRIBUTE_WHEEL = "volante";
-	private static final String ATRRIBUTE_WHEEL_LEFT = "esquerda";
-	private static final String ATRRIBUTE_WHEEL_RIGHT = "direita";
-	private static final String ENGINE_NAME = "nashorn";
+	public static final String ATRRIBUTE_PEDAL = "pedal";
+	public static final String ATRRIBUTE_PEDAL_ACCELERATE = "accelerate";
+	public static final String ATRRIBUTE_PEDAL_BRAKE = "brake";
+	public static final String ATRRIBUTE_WHEEL = "wheel";
+	public static final String ATRRIBUTE_WHEEL_LEFT = "left";
+	public static final String ATRRIBUTE_WHEEL_RIGHT = "right";
 	private static final String FORMAT_CAR_FILE_PATH = "cars/%s.js";
 	private static final String FORMAT_JS_CREATE_CAR_VARIABLE = "car%d = %s;";
-	private static final String FORMAT_JS_CALL_PLAY = "car%d.jogar(%s)";
+	private static final String FORMAT_JS_CALL_PLAY = "car%d.play(%s)";
 	private static final String FORMAT_JS_GET_ATTRIBUTE = "car%d.%s";
+	private static final String ENGINE_NAME = "nashorn";
 	
-	private static ScriptEngine engine = new ScriptEngineManager().getEngineByName(ENGINE_NAME);;
+	private static ScriptEngine engine = new ScriptEngineManager().getEngineByName(ENGINE_NAME);
 	private static int lastCarIndex = 0;
 	
 	private JsEngine() {}
