@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project tsiracing">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="/media/guilherme/Dados/workspace java/tsiracing/tsiracing.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="br.utfpr.gp.tsi.racing.Game"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="/media/guilherme/Dados/workspace java/tsiracing/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/jpct.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/lwjgl_util.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/lwjgl.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/org.json.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/jinput.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/lzma.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/media/guilherme/Dados/workspace java/tsiracing/lib/AppleJavaExtensions.jar"/>
+        </jar>
+    </target>
+</project>
